@@ -406,7 +406,9 @@ main>.airglide-logo{display:none}
 h1{font-size:clamp(42px,5.4vw,72px);letter-spacing:-.055em;margin:0}h1 span{color:#94caff}
 .ready{color:#bee8cb}.ready:before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#8ee3b4;margin-right:8px}
 .pass,.scan{border-radius:22px;padding:clamp(16px,2.3vw,28px);border:1px solid #35455d}.pass{background:linear-gradient(125deg,#243753,#1b2338)}.pass small{color:#c5defb;letter-spacing:.12em;text-transform:uppercase}.pin{font:650 clamp(34px,4.6vw,56px)/1.3 ui-monospace,monospace;letter-spacing:.09em;color:white}.pass p,.scan p{margin:6px 0;font-size:14px}
-.pair{grid-template-columns:1fr 1fr}.scan{background:#151e2c;display:flex;align-items:center;gap:18px}.scan h2{margin:0;font-size:21px}.scan .qr{width:clamp(120px,12vw,156px);height:auto;margin:0;flex:none}.scan a{color:#a9d6ff}summary{cursor:pointer}footer{border-top:1px solid #344156;padding-top:15px}
+.pair{grid-template-columns:1fr 1fr}.scan{background:#151e2c;display:flex;align-items:center;gap:18px}.scan h2{margin:0;font-size:21px}.scan{--qr-frame:#6fcaff}
+.scan:nth-child(2){--qr-frame:#b5a4ff}
+.scan .qr{width:clamp(120px,12vw,156px);height:auto;box-sizing:border-box;margin:0;flex:none;padding:5px;background:#fff;border:2px solid var(--qr-frame);border-radius:16px;box-shadow:0 4px 18px #060d1980}.scan a{color:#a9d6ff}summary{cursor:pointer}footer{border-top:1px solid #344156;padding-top:15px}
 @media(max-width:820px){.scan{flex-direction:column;align-items:flex-start}}@media(max-width:600px){.hero,.pair{grid-template-columns:1fr;gap:12px}.hero{margin:24px 0}.scan{flex-direction:row;align-items:center}.mast small{font-size:11px}}
 </style>
 <header class="mast"><img src="/icon.svg" alt="">AirGlide <small>Windows companion · {{.Version}}</small></header>
