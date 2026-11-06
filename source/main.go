@@ -262,7 +262,7 @@ func (a *app) secureHandler() http.Handler {
 	web, _ := fs.Sub(assets, "web")
 	files := http.FileServer(http.FS(web))
 	mux.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		allowed := map[string]bool{"/": true, "/index.html": true, "/style.css": true, "/app.js": true, "/motion.js": true, "/manifest.webmanifest": true, "/icon.svg": true, "/icon.svg": true, "/icon-192.png": true, "/icon-512.png": true, "/apple-touch-icon.png": true, "/sw.js": true}
+		allowed := map[string]bool{"/": true, "/index.html": true, "/style.css": true, "/app.js": true, "/motion.js": true, "/manifest.webmanifest": true, "/icon.svg": true, "/icon-192.png": true, "/icon-512.png": true, "/apple-touch-icon.png": true, "/sw.js": true}
 		if !allowed[r.URL.Path] {
 			http.NotFound(w, r)
 			return
@@ -335,7 +335,7 @@ func (a *app) plainHandler() http.Handler {
 			}
 		}
 		if r.URL.Path == "/icon.svg" {
-			w.Header().Set("Content-Type", "image/png")
+			w.Header().Set("Content-Type", "image/svg+xml")
 			data, _ := assets.ReadFile("web/icon.svg")
 			_, _ = w.Write(data)
 			return
