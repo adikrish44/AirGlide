@@ -70,6 +70,7 @@ def local_ip():
 
 app = web.Application()
 app.router.add_get("/", index)
+app.router.add_get("/logo.json", lambda request: web.FileResponse(ROOT / "web" / "logo.json"))
 app.router.add_get("/ws", ws_handler)
 if __name__ == "__main__":
     print(f"AirGlide: http://{local_ip()}:{PORT}")
