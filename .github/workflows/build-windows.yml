@@ -1,0 +1,48 @@
+name: Build AirGlide Windows
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'source/**'
+      - '.github/workflows/build-windows.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: source/go.mod
+          cache-dependency-path: source/go.sum
+      - name: Generate branded icons
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librsvg2-bin
+          rsvg-convert -w 192 -h 192 source/web/icon.svg -o source/web/icon-192.png
+          rsvg-convert -w 512 -h 512 source/web/icon.svg -o source/web/icon-512.png
+          rsvg-convert -w 180 -h 180 source/web/icon.svg -o source/web/apple-touch-icon.png
+      - name: Test
+        working-directory: source
+        run: go test ./...
+      - name: Cross-compile Windows executable
+        working-directory: source
+        env:
+          GOOS: windows
+          GOARCH: amd64
+          CGO_ENABLED: '0'
+        run: go build -trimpath -buildvcs=false -ldflags="-s -w" -o ../AirGlide.exe .
+      - name: Package Windows distribution
+        run: |
+          mkdir -p dist
+          cp AirGlide.exe START.cmd START-HERE.html airglide-logo.svg dist/
+          cp -r source/web dist/web-preview
+          cd dist
+          zip -r ../AirGlide-Windows-v1.3.1.zip .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AirGlide-Windows-v1.3.1
+          path: AirGlide-Windows-v1.3.1.zip
+          if-no-files-found: error
