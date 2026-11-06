@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101518">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="A motion remote for your Windows PC.">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+  <title>AirGlide</title>
+</head>
+<body>
+<svg class="symbol-library" aria-hidden="true"><defs>
+  <symbol id="i-pointer" viewBox="0 0 24 24"><path d="m5 3 14 9-7 1-3 7L5 3Z"/></symbol>
+  <symbol id="i-wave" viewBox="0 0 24 24"><path d="M3 12c2-9 4 9 6 0s4 9 6 0 4 9 6 0"/></symbol>
+  <symbol id="i-touch" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="4"/><path d="M9 17h6m-3-9v5m-2-2 2 2 2-2"/></symbol>
+  <symbol id="i-recenter" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-keyboard" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 15h10"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 6h5m4 0h7M4 12h11m4 0h1M4 18h1m4 0h11"/><circle cx="11" cy="6" r="2"/><circle cx="17" cy="12" r="2"/><circle cx="7" cy="18" r="2"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="m7 5 10 7-10 7V5Z"/></symbol>
+  <symbol id="i-volume" viewBox="0 0 24 24"><path d="M3 9h4l5-4v14l-5-4H3V9Zm13-1a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="m10 5-7 7 7 7m-7-7h18"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4 10-10"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+</defs></svg>
+
+<main class="app">
+  <header class="topbar">
+    <div class="brand"><img class="airglide-logo" src="/airglide-logo.png" alt="AirGlide"></div>
+    <button class="connection" id="connection" aria-label="Connection status"><span class="status-dot"></span><span id="status-label">Offline</span></button>
+  </header>
+  <div class="preview-banner" id="preview-banner" hidden>INTERFACE PREVIEW · NO PC CONNECTED</div>
+
+  <section id="pairing" class="pairing">
+    <span class="eyebrow">THE ROOM IS YOUR MOUSEPAD</span>
+    <h1>A little motion.<br>A big screen.</h1>
+    <div class="pair-art" aria-hidden="true"><div class="orbit one"></div><div class="orbit two"></div><svg><use href="#i-pointer"/></svg><span class="orbit-dot"></span></div>
+    <h2>Connect to your PC</h2>
+    <p class="muted">Enter the six-digit code from the<br>AirGlide window on Windows.</p>
+    <form id="pair-form">
+      <label class="sr-only" for="pin">Six-digit pairing code</label>
+      <input id="pin" name="pin" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" minlength="6" maxlength="6" placeholder="000000" required>
+      <button class="primary" id="pair-button" type="submit">Connect remote <span aria-hidden="true">↗</span></button>
+    </form>
+    <p id="pair-error" class="form-error" role="alert"></p>
+    <p class="secure-note"><svg><use href="#i-lock"/></svg>Private connection on your home network</p>
+    <details class="help"><summary>First time here?</summary><p>Run <strong>START.cmd</strong> on your PC and scan its setup QR code. Follow the setup for your phone, then open the secure remote link in Chrome on Android or Safari on iPhone.</p></details>
+  </section>
+
+  <section id="remote" hidden>
+    <div class="device-row"><div><span class="eyebrow">CONTROLLING</span><h1 id="device-name">Your Windows PC</h1></div><span class="latency" id="latency">— ms</span></div>
+    <div class="mode-switch" role="group" aria-label="Pointer mode">
+      <button id="mode-air" class="selected" aria-pressed="true"><svg><use href="#i-wave"/></svg>Air mouse</button>
+      <button id="mode-touch" aria-pressed="false"><svg><use href="#i-touch"/></svg>Touchpad</button>
+    </div>
+    <div class="motion-caption"><span class="motion-dot" id="motion-dot"></span><span id="motion-caption">Ready when you are</span></div>
+
+    <div class="control-zone" id="control-zone">
+      <div class="pointer-surface" id="pointer-surface">
+        <div class="surface-cross horizontal"></div><div class="surface-cross vertical"></div>
+        <div class="surface-ring"></div>
+        <button class="click-target" id="left-click" aria-label="Left click"><svg><use href="#i-pointer"/></svg><strong id="click-label">Click</strong><span id="click-hint">Tap to select</span></button>
+        <div class="touch-hint" id="touch-hint" hidden><svg><use href="#i-touch"/></svg><strong>Move with your finger</strong><span>Tap to click · Two fingers to scroll</span></div>
+        <div class="motion-start" id="motion-start"><svg><use href="#i-wave"/></svg><strong>Point. Move. Click.</strong><span>Hold your phone with its top edge<br>aimed toward the screen.</span><button class="primary" id="enable-motion">Enable motion</button></div>
+      </div>
+      <div class="scroll-rail" id="scroll-rail" role="slider" tabindex="0" aria-label="Scroll page" aria-valuemin="-100" aria-valuemax="100" aria-valuenow="0"><span>↑</span><span class="rail-line"></span><span class="rail-label">SCROLL</span><span class="rail-line"></span><span>↓</span></div>
+    </div>
+    <div class="mouse-row">
+      <button class="secondary" id="reposition"><svg><use href="#i-recenter"/></svg><span>Hold to reposition</span></button>
+      <button class="secondary right-click" id="right-click">Right click</button>
+    </div>
+
+    <div class="media-row" aria-label="Media controls">
+      <button class="icon-btn" data-key="mute" aria-label="Mute volume"><svg><use href="#i-volume"/></svg></button>
+      <button class="volume-button" data-key="volume_down" aria-label="Volume down">−</button>
+      <span class="media-divider"></span>
+      <button class="play-button" data-key="play_pause" aria-label="Play or pause"><svg><use href="#i-play"/></svg></button>
+      <span class="media-divider"></span>
+      <button class="volume-button" data-key="volume_up" aria-label="Volume up">+</button>
+      <button class="icon-btn" data-key="escape" aria-label="Escape"><svg><use href="#i-back"/></svg></button>
+    </div>
+    <div class="bottom-row">
+      <button class="tool-button" id="open-keyboard"><svg><use href="#i-keyboard"/></svg>Keyboard</button>
+      <span class="bottom-note" id="bottom-note">Your phone. Your pointer.</span>
+      <button class="tool-button" id="open-settings"><svg><use href="#i-sliders"/></svg>Settings</button>
+    </div>
+    <p id="connection-help" class="connection-help" hidden>Connection lost. Keep the PC companion open and use the same Wi-Fi. <button id="reconnect">Reconnect</button></p>
+  </section>
+<footer class="creator">Created by <strong>Aditya Krishna Thota</strong> · <a href="https://www.instagram.com/adi__krish/" target="_blank" rel="noopener noreferrer">@adi__krish</a></footer></main>
+
+<dialog id="keyboard-dialog" class="sheet">
+  <div class="sheet-head"><div><span class="eyebrow">ON THE BIG SCREEN</span><h2>Type from here.</h2></div><button class="icon-btn close-sheet" aria-label="Close keyboard"><svg><use href="#i-close"/></svg></button></div>
+  <label for="text-input" class="muted">Select a text field on your PC first.</label>
+  <textarea id="text-input" maxlength="256" rows="3" placeholder="Write something…"></textarea>
+  <button class="primary" id="send-text">Send text <span>↗</span></button>
+  <div class="key-row"><button data-key="escape">Esc</button><button data-key="tab">Tab</button><button data-key="backspace">⌫</button><button data-key="enter">Enter ↵</button></div>
+  <div class="key-row"><button data-key="left" aria-label="Left arrow">←</button><button data-key="up" aria-label="Up arrow">↑</button><button data-key="down" aria-label="Down arrow">↓</button><button data-key="right" aria-label="Right arrow">→</button></div>
+<footer class="creator">Created by <strong>Aditya Krishna Thota</strong> · <a href="https://www.instagram.com/adi__krish/" target="_blank" rel="noopener noreferrer">@adi__krish</a></footer></dialog>
+<dialog id="settings-dialog" class="sheet">
+  <div class="sheet-head"><div><span class="eyebrow">MAKE IT FEEL RIGHT</span><h2>Your movement.</h2></div><button class="icon-btn close-sheet" aria-label="Close settings"><svg><use href="#i-close"/></svg></button></div>
+  <label class="setting-label" for="sensitivity">Pointer speed <output id="sensitivity-value">1.0×</output></label>
+  <input id="sensitivity" type="range" min="0.35" max="2.5" step="0.05" value="1">
+  <div class="range-labels"><span>Precise</span><span>Fast</span></div>
+  <label class="toggle-row" for="smoothing"><span>Steady movement<small>Reduce small hand movements</small></span><input type="checkbox" id="smoothing" checked></label>
+  <label class="toggle-row" for="invert-x"><span>Reverse left / right</span><input type="checkbox" id="invert-x"></label>
+  <label class="toggle-row" for="invert-y"><span>Reverse up / down</span><input type="checkbox" id="invert-y"></label>
+  <p class="muted small">Aim the top edge of your phone at the screen. Hold “reposition” while moving your hand back to a comfortable position.</p>
+  <button class="secondary wide" id="pause-motion">Pause motion</button>
+  <button class="disconnect-button" id="disconnect">Disconnect from PC</button>
+  <p class="version">AirGlide 1.3 · Local connection</p>
+<footer class="creator">Created by <strong>Aditya Krishna Thota</strong> · <a href="https://www.instagram.com/adi__krish/" target="_blank" rel="noopener noreferrer">@adi__krish</a></footer></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script type="module" src="/app.js"></script>
+</body>
+</html>
