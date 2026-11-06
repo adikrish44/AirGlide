@@ -262,7 +262,7 @@ func (a *app) secureHandler() http.Handler {
 	web, _ := fs.Sub(assets, "web")
 	files := http.FileServer(http.FS(web))
 	mux.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		allowed := map[string]bool{"/": true, "/index.html": true, "/style.css": true, "/app.js": true, "/motion.js": true, "/manifest.webmanifest": true, "/airglide-logo.png": true, "/icon.svg": true, "/icon-192.png": true, "/icon-512.png": true, "/apple-touch-icon.png": true, "/sw.js": true}
+		allowed := map[string]bool{"/": true, "/index.html": true, "/style.css": true, "/app.js": true, "/motion.js": true, "/manifest.webmanifest": true, "/icon.svg": true, "/icon.svg": true, "/icon-192.png": true, "/icon-512.png": true, "/apple-touch-icon.png": true, "/sw.js": true}
 		if !allowed[r.URL.Path] {
 			http.NotFound(w, r)
 			return
@@ -287,7 +287,7 @@ const pageCSS = `body{margin:0;background:#0d1117;color:#edf2f7;font:16px/1.6 sy
 
 func renderPage(w http.ResponseWriter, t string, data any) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	tpl := template.Must(template.New("page").Parse(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>AirGlide setup</title><style>` + pageCSS + `.creator{margin:22px 0 8px;color:#a8bdc3;font-size:12px;line-height:1.7}.creator strong{color:#edf3f0}.creator a{color:#abe4cd;text-decoration:underline;text-underline-offset:3px}.airglide-logo{display:block;width:96px;height:auto;margin-bottom:18px}` + `</style></head><body><main><img class="airglide-logo" src="/airglide-logo.png" alt="AirGlide">` + t + `<footer class="creator">Created by <strong>Aditya Krishna Thota</strong> · <a href="https://www.instagram.com/adi__krish/" target="_blank" rel="noopener noreferrer">@adi__krish</a></footer></main></body></html>`))
+	tpl := template.Must(template.New("page").Parse(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>AirGlide setup</title><style>` + pageCSS + `.creator{margin:22px 0 8px;color:#a8bdc3;font-size:12px;line-height:1.7}.creator strong{color:#edf3f0}.creator a{color:#abe4cd;text-decoration:underline;text-underline-offset:3px}.airglide-logo{display:block;width:96px;height:auto;margin-bottom:18px}` + `</style></head><body><main><img class="airglide-logo" src="/icon.svg" alt="AirGlide">` + t + `<footer class="creator">Created by <strong>Aditya Krishna Thota</strong> · <a href="https://www.instagram.com/adi__krish/" target="_blank" rel="noopener noreferrer">@adi__krish</a> · <a href="https://www.instagram.com/adi__krish/" target="_blank" rel="noopener noreferrer">Send Feedback</a></footer></main></body></html>`))
 	_ = tpl.Execute(w, data)
 }
 
@@ -334,9 +334,9 @@ func (a *app) plainHandler() http.Handler {
 				}
 			}
 		}
-		if r.URL.Path == "/airglide-logo.png" {
+		if r.URL.Path == "/icon.svg" {
 			w.Header().Set("Content-Type", "image/png")
-			data, _ := assets.ReadFile("web/airglide-logo.png")
+			data, _ := assets.ReadFile("web/icon.svg")
 			_, _ = w.Write(data)
 			return
 		}
