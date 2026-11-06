@@ -1,5 +1,5 @@
-const CACHE='airremote-1.3.0';
-const SHELL=['/','/style.css','/app.js','/motion.js','/manifest.webmanifest','/airglide-logo.png','/icon.svg','/icon-192.png','/icon-512.png','/apple-touch-icon.png'];
+const CACHE='airremote-1.3.1';
+const SHELL=['/','/style.css','/app.js','/motion.js','/manifest.webmanifest','/icon.svg','/icon-192.png','/icon-512.png','/apple-touch-icon.png'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('airremote-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
 self.addEventListener('fetch',event=>{
