@@ -1,0 +1,2 @@
+aiohttp>=3.10,<4
+pyautogui>=0.9.54,<1
