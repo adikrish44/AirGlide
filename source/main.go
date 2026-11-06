@@ -31,7 +31,7 @@ import (
 //go:embed web/*
 var assets embed.FS
 
-const version = "1.3.0"
+const version = "1.3.2"
 
 type session struct{ Expires time.Time }
 type limiter struct {

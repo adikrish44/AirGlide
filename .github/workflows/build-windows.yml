@@ -2,9 +2,6 @@ name: Build AirGlide Windows
 on:
   push:
     branches: [main]
-    paths:
-      - 'source/**'
-      - '.github/workflows/build-windows.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -26,7 +23,9 @@ jobs:
           rsvg-convert -w 180 -h 180 source/web/icon.svg -o source/web/apple-touch-icon.png
       - name: Test
         working-directory: source
-        run: go test ./...
+        run: |
+          go test ./...
+          node --test tests/motion.test.js
       - name: Cross-compile Windows executable
         working-directory: source
         env:
@@ -37,12 +36,35 @@ jobs:
       - name: Package Windows distribution
         run: |
           mkdir -p dist
-          cp AirGlide.exe START.cmd START-HERE.html airglide-logo.svg dist/
-          cp -r source/web dist/web-preview
+          cp AirGlide.exe START.cmd START-HERE.html README.md Enable-Private-Network.* LICENSE *-NOTICES.txt WORDMARK-FONT-LICENSE.txt dist/
+          cp source/web/icon.svg dist/airglide-logo.svg
           cd dist
-          zip -r ../AirGlide-Windows-v1.3.1.zip .
+          sha256sum AirGlide.exe > SHA256SUMS.txt
+          zip -q ../AirGlide-Windows.zip *
+          unzip -t ../AirGlide-Windows.zip
       - uses: actions/upload-artifact@v4
         with:
-          name: AirGlide-Windows-v1.3.1
-          path: AirGlide-Windows-v1.3.1.zip
+          name: release-package
+          path: AirGlide-Windows.zip
           if-no-files-found: error
+
+  publish:
+    needs: windows-build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-package
+      - name: Publish new companion versions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(sed -n 's/^const version = "\([0-9.]*\)"/\1/p' source/main.go)
+          test -n "$version"
+          if ! gh release view "v$version" >/dev/null 2>&1; then
+            gh release create "v$version" AirGlide-Windows.zip --target "$GITHUB_SHA" --title "AirGlide $version for Windows" --notes "Extract AirGlide-Windows.zip and run START.cmd. See START-HERE.html for phone setup."
+          fi
