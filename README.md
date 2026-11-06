@@ -13,7 +13,7 @@ Open `START-HERE.html` for device-specific instructions. If Windows Firewall blo
 
 ## Build from source
 
-The Windows release includes the web interface inside the executable. The repository's Code download is for developers. On Windows with Go 1.24 or later:
+The Windows release includes the web interface inside the executable. You can also choose **Code → Download ZIP**, extract the entire folder, and run `START.cmd` beside the included `AirGlide.exe`. On Windows with Go 1.24 or later:
 
 ```powershell
 cd source
