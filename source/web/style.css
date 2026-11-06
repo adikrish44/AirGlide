@@ -11,3 +11,5 @@
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 
 .creator{margin:22px 0 8px;color:#a8bdc3;font-size:12px;line-height:1.7}.creator strong{color:#edf3f0}.creator a{color:#abe4cd;text-decoration:underline;text-underline-offset:3px}.airglide-logo{display:block;width:96px;height:auto;margin-bottom:18px}.topbar .airglide-logo{width:85px;margin:0}.app>.creator{text-align:center}.sheet .creator{text-align:center}
+
+.brand-icon{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:11px;background:#192c48;color:#80c3ff;font-size:25px}.creator a{white-space:nowrap}
